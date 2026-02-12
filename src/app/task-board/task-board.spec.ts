@@ -56,7 +56,6 @@ describe('TaskBoard', () => {
 
     fixture.nativeElement.querySelector('button').click();
     fixture.detectChanges();
-    await fixture.whenStable();
     fixture.detectChanges();
 
     expect(input.value).toBe('');
