@@ -1,9 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+type TaskStatus = 'To Do' | 'In Progress' | 'Done';
+
 interface Task {
   title: string;
-  status: string;
+  status: TaskStatus;
 }
 
 @Component({
@@ -13,17 +15,25 @@ interface Task {
   styleUrl: './task-board.scss',
 })
 export class TaskBoard {
+  protected readonly STATUSES: TaskStatus[] = ['To Do', 'In Progress', 'Done'];
   protected readonly tasks = signal<Task[]>([]);
-  protected newTitle = '';
-  protected newStatus = '';
+  protected readonly newTitle = signal('');
+  protected readonly newStatus = signal<TaskStatus | ''>('');
+  protected readonly titleError = signal(false);
 
   protected addTask() {
-    const title = this.newTitle.trim();
-    const status = this.newStatus.trim();
-    if (!title || !status) return;
+    const title = this.newTitle().trim();
+    const status = this.newStatus();
 
+    if (!title) {
+      this.titleError.set(true);
+      return;
+    }
+    if (!status) return;
+
+    this.titleError.set(false);
     this.tasks.update((tasks) => [...tasks, { title, status }]);
-    this.newTitle = '';
-    this.newStatus = '';
+    this.newTitle.set('');
+    this.newStatus.set('');
   }
 }

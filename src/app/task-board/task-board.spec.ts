@@ -17,11 +17,13 @@ describe('TaskBoard', () => {
     const fixture = TestBed.createComponent(TaskBoard);
     fixture.detectChanges();
 
-    const inputs = fixture.nativeElement.querySelectorAll('input') as NodeListOf<HTMLInputElement>;
-    inputs[0].value = 'My task';
-    inputs[0].dispatchEvent(new Event('input'));
-    inputs[1].value = 'To do';
-    inputs[1].dispatchEvent(new Event('input'));
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    input.value = 'My task';
+    input.dispatchEvent(new Event('input'));
+
+    const select = fixture.nativeElement.querySelector('select') as HTMLSelectElement;
+    select.value = 'To Do';
+    select.dispatchEvent(new Event('change'));
 
     fixture.nativeElement.querySelector('button').click();
     fixture.detectChanges();
@@ -29,7 +31,7 @@ describe('TaskBoard', () => {
     const title = fixture.nativeElement.querySelector('.task-title');
     const status = fixture.nativeElement.querySelector('.task-status');
     expect(title?.textContent).toContain('My task');
-    expect(status?.textContent).toContain('To do');
+    expect(status?.textContent).toContain('To Do');
   });
 
   it('should show empty state', () => {
@@ -40,13 +42,78 @@ describe('TaskBoard', () => {
     expect(empty?.textContent).toContain('No tasks yet');
   });
 
+  it('should clear inputs after adding a task', async () => {
+    const fixture = TestBed.createComponent(TaskBoard);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    input.value = 'My task';
+    input.dispatchEvent(new Event('input'));
+
+    const select = fixture.nativeElement.querySelector('select') as HTMLSelectElement;
+    select.value = 'To Do';
+    select.dispatchEvent(new Event('change'));
+
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(input.value).toBe('');
+    expect(select.value).toBe('');
+  });
+
   it('should not add a task with empty title', () => {
     const fixture = TestBed.createComponent(TaskBoard);
     fixture.detectChanges();
 
-    const inputs = fixture.nativeElement.querySelectorAll('input') as NodeListOf<HTMLInputElement>;
-    inputs[1].value = 'To do';
-    inputs[1].dispatchEvent(new Event('input'));
+    const select = fixture.nativeElement.querySelector('select') as HTMLSelectElement;
+    select.value = 'To Do';
+    select.dispatchEvent(new Event('change'));
+
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+
+    const title = fixture.nativeElement.querySelector('.task-title');
+    expect(title).toBeNull();
+  });
+
+  it('should show error style on title input when adding with empty title', () => {
+    const fixture = TestBed.createComponent(TaskBoard);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+
+    expect(input.classList).toContain('error');
+  });
+
+  it('should clear error style when typing in title input', () => {
+    const fixture = TestBed.createComponent(TaskBoard);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+    expect(input.classList).toContain('error');
+
+    input.value = 'A';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(input.classList).not.toContain('error');
+  });
+
+  it('should not add a task with no status selected', () => {
+    const fixture = TestBed.createComponent(TaskBoard);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    input.value = 'My task';
+    input.dispatchEvent(new Event('input'));
 
     fixture.nativeElement.querySelector('button').click();
     fixture.detectChanges();
