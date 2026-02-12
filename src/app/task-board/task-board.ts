@@ -35,6 +35,7 @@ export class TaskBoard {
     if (!title || !status) return;
 
     this.titleError.set(false);
+    this.statusError.set(false);
     this.tasks.update((tasks) => [...tasks, { title, status }]);
     this.newTitle.set('');
     this.newStatus.set('');
