@@ -5,6 +5,5 @@ import { TaskBoard } from './task-board/task-board';
   selector: 'app-root',
   imports: [TaskBoard],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
 })
 export class App {}
