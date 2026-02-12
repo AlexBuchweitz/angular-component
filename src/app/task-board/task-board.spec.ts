@@ -78,6 +78,26 @@ describe('TaskBoard', () => {
     expect(title).toBeNull();
   });
 
+  it('should not add a task with whitespace-only title', () => {
+    const fixture = TestBed.createComponent(TaskBoard);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    input.value = '   ';
+    input.dispatchEvent(new Event('input'));
+
+    const select = fixture.nativeElement.querySelector('select') as HTMLSelectElement;
+    select.value = 'To Do';
+    select.dispatchEvent(new Event('change'));
+
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+
+    const title = fixture.nativeElement.querySelector('.task-title');
+    expect(title).toBeNull();
+    expect(input.classList).toContain('error');
+  });
+
   it('should show error style on title input when adding with empty title', () => {
     const fixture = TestBed.createComponent(TaskBoard);
     fixture.detectChanges();
