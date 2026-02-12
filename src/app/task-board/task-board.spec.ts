@@ -173,6 +173,31 @@ describe('TaskBoard', () => {
     expect(select.classList).toContain('error');
   });
 
+  it('should clear error styles on both fields after successful add', () => {
+    const fixture = TestBed.createComponent(TaskBoard);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    const select = fixture.nativeElement.querySelector('select') as HTMLSelectElement;
+
+    // Trigger both errors
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+    expect(input.classList).toContain('error');
+    expect(select.classList).toContain('error');
+
+    // Fill in valid data and submit
+    input.value = 'My task';
+    input.dispatchEvent(new Event('input'));
+    select.value = 'To Do';
+    select.dispatchEvent(new Event('change'));
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+
+    expect(input.classList).not.toContain('error');
+    expect(select.classList).not.toContain('error');
+  });
+
   it('should not add a task with no status selected', () => {
     const fixture = TestBed.createComponent(TaskBoard);
     fixture.detectChanges();
