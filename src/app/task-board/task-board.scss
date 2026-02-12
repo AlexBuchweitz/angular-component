@@ -21,9 +21,9 @@ h1 {
     font-size: 1rem;
   }
 
-  input.error {
+  input.error,
+  select.error {
     outline: 2px solid #e53935;
-    border-color: #e53935;
   }
 
   button {

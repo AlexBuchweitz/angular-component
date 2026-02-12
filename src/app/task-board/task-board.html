@@ -7,7 +7,7 @@
     [ngModel]="newTitle()"
     (ngModelChange)="newTitle.set($event); titleError.set(false)"
   />
-  <select [ngModel]="newStatus()" (ngModelChange)="newStatus.set($event)">
+  <select [class.error]="statusError()" [ngModel]="newStatus()" (ngModelChange)="newStatus.set($event); statusError.set(false)">
     <option value="" disabled>Status</option>
     @for (s of STATUSES; track s) {
       <option [value]="s">{{ s }}</option>

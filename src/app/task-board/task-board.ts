@@ -20,6 +20,7 @@ export class TaskBoard {
   protected readonly newTitle = signal('');
   protected readonly newStatus = signal<TaskStatus | ''>('');
   protected readonly titleError = signal(false);
+  protected readonly statusError = signal(false);
 
   protected addTask() {
     const title = this.newTitle().trim();
@@ -27,9 +28,11 @@ export class TaskBoard {
 
     if (!title) {
       this.titleError.set(true);
-      return;
     }
-    if (!status) return;
+    if (!status) {
+      this.statusError.set(true);
+    }
+    if (!title || !status) return;
 
     this.titleError.set(false);
     this.tasks.update((tasks) => [...tasks, { title, status }]);

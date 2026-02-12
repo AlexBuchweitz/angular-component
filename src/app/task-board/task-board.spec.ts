@@ -107,6 +107,52 @@ describe('TaskBoard', () => {
     expect(input.classList).not.toContain('error');
   });
 
+  it('should show error style on select when adding with no status', () => {
+    const fixture = TestBed.createComponent(TaskBoard);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    input.value = 'My task';
+    input.dispatchEvent(new Event('input'));
+
+    const select = fixture.nativeElement.querySelector('select') as HTMLSelectElement;
+
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+
+    expect(select.classList).toContain('error');
+  });
+
+  it('should clear error style on select when changing status', () => {
+    const fixture = TestBed.createComponent(TaskBoard);
+    fixture.detectChanges();
+
+    const select = fixture.nativeElement.querySelector('select') as HTMLSelectElement;
+
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+    expect(select.classList).toContain('error');
+
+    select.value = 'To Do';
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    expect(select.classList).not.toContain('error');
+  });
+
+  it('should show error on both title and status when both are empty', () => {
+    const fixture = TestBed.createComponent(TaskBoard);
+    fixture.detectChanges();
+
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    const select = fixture.nativeElement.querySelector('select') as HTMLSelectElement;
+    expect(input.classList).toContain('error');
+    expect(select.classList).toContain('error');
+  });
+
   it('should not add a task with no status selected', () => {
     const fixture = TestBed.createComponent(TaskBoard);
     fixture.detectChanges();
