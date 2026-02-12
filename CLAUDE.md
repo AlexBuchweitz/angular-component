@@ -20,7 +20,7 @@ Angular 21 application using standalone components.
 ## Project Structure
 
 - `src/` — Application source
-  - `app/` — Root component and routing
+  - `app/` — Root component and feature components (e.g. `task-board/`)
   - `main.ts` — Application entry point
   - `styles.scss` — Global styles
   - `index.html` — HTML entry point

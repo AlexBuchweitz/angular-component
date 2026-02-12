@@ -1,0 +1,18 @@
+<h1>My Task Board</h1>
+
+<div class="add-task">
+  <input placeholder="Title" [(ngModel)]="newTitle" />
+  <input placeholder="Status" [(ngModel)]="newStatus" />
+  <button type="button" (click)="addTask()">Add</button>
+</div>
+
+<ul class="task-list">
+  @for (task of tasks(); track $index) {
+    <li>
+      <span class="task-title">{{ task.title }}</span>
+      <span class="task-status">{{ task.status }}</span>
+    </li>
+  } @empty {
+    <li class="empty">No tasks yet</li>
+  }
+</ul>
